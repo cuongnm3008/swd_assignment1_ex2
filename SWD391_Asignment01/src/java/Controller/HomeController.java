@@ -65,7 +65,7 @@ public class HomeController extends HttpServlet {
                 case "/logout":
                     SessionUltil.getInstance().removeValue(request, "USERMODEL");
                     response.sendRedirect(request.getContextPath() + "/home"); // logout success
-                    break;               
+                    break;
                 default:
                     listBook(request, response);
                     break;
@@ -73,7 +73,7 @@ public class HomeController extends HttpServlet {
         } catch (Exception ex) {
             Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex
             );
-           
+
         }
     }
 
@@ -120,17 +120,29 @@ public class HomeController extends HttpServlet {
 
     private void addToCart(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException, ServletException, Exception {
-        int bookID =0;
+        Customer user = (Customer) SessionUltil.getInstance().getValue(request, "USERMODEL");
+        if (user == null) {
+            response.sendRedirect(request.getContextPath() + "/login");
+        }
+        int bookID = 0;
         float totalPrice = 0;
         if (request.getParameterMap().containsKey("bookId")) {
             bookID = Integer.parseInt(request.getParameter("bookId"));
         }
         if (request.getParameterMap().containsKey("price")) {
-             totalPrice = Float.parseFloat(request.getParameter("price"));
+            totalPrice = Float.parseFloat(request.getParameter("price"));
         }
-        Customer user = (Customer) SessionUltil.getInstance().getValue(request, "USERMODEL");
-        _cartService.addItemToCart(new Cart(1,user.getId(),bookID,totalPrice));
-        listBook(request, response);
+
+        Cart cartItem = _cartService.getCartItem(user.getId(), bookID);
+        if (cartItem != null) {
+//            int cartId = cartItem.getId();
+            int customerId = cartItem.getCustomerId();
+            int quantity = cartItem.getQuantity() + 1;
+            boolean result = _cartService.updateCart(quantity, customerId,bookID);
+        } else {
+            _cartService.addItemToCart(new Cart(1, user.getId(), bookID, totalPrice));
+        }
+        response.sendRedirect(request.getContextPath() + "/home");
     }
 
     @Override
@@ -145,7 +157,7 @@ public class HomeController extends HttpServlet {
                 case "/register":
                     register(request, response);
                     break;
-                 case "/add-to-cart":
+                case "/add-to-cart":
                     addToCart(request, response);
                     break;
                 default:

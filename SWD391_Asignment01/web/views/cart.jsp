@@ -45,7 +45,7 @@
                                             <td><c:out value="${item.totalPrice}" /></td>
                                             <td style="text-align: center;">                                               
                                                 <input type="hidden" name="cartId" value="${item.cartId}">
-                                                <button type="submit" class="btn" style="background-color:#3A954E;">
+                                                <button type="submit" class="btn" style="background-color:#3A954E; color: wheat">
                                                     Buy
                                                 </button>
                                             </td>

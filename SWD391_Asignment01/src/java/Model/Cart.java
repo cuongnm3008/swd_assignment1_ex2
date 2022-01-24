@@ -15,11 +15,31 @@ public class Cart {
     float totalPrice;
     Date dateCreated;
 
+    
+    
+    public Cart(int id, int quantity, int customerId, int bookId, float totalPrice, Date dateCreated) {
+        this.id = id;
+        this.quantity = quantity;
+        this.customerId = customerId;
+        this.bookId = bookId;
+        this.totalPrice = totalPrice;
+        this.dateCreated = dateCreated;
+    }
+
+    
     public Cart(int quantity, int customerId, int bookId, float totalPrice) {
         this.quantity = quantity;
         this.customerId = customerId;
         this.bookId = bookId;
         this.totalPrice = totalPrice;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     
