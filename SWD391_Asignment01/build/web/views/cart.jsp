@@ -30,19 +30,19 @@
                                             <th>Author</th>
                                             <th>Publisher</th>
                                             <th>Quantity</th>
-                                            <th>Price</th>
+                                            <th>Total Price</th>
                                             <th style="text-align: center;">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <c:forEach var="item" items="${listBook}">
                                             <tr>
-                                        <form action="/create-order" method="post">
+                                        <form action="<%=request.getContextPath()%>/checkout" method="get">
                                             <td><c:out value="${item.bookName}" /></td>
                                             <td><c:out value="${item.author}" /></td>
                                             <td><c:out value="${item.publisher}" /></td>
                                             <td><c:out value="${item.quantity}" /></td>
-                                            <td><c:out value="${item.totalPrice}" /></td>
+                                            <td><c:out value="${item.totalPrice}" /> $</td>
                                             <td style="text-align: center;">                                               
                                                 <input type="hidden" name="cartId" value="${item.cartId}">
                                                 <button type="submit" class="btn" style="background-color:#3A954E; color: wheat">

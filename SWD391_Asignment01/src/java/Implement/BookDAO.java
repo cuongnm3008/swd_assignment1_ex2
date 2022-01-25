@@ -38,6 +38,7 @@ public class BookDAO implements IBookDAO{
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    
     @Override
     public List<Book> selectAllBooks() {
          // using try-with-resources to avoid closing resources (boiler plate code)
@@ -65,6 +66,30 @@ public class BookDAO implements IBookDAO{
          }
         return books;
     }
-
+    
+     public Book getBookById(int bookId) {
+        try (Connection connection = new DBContext().getConnection();
+                // Step 2:Create a statement using connection object
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM dbo.Book WHERE Id =?");) {
+            System.out.println(preparedStatement);
+            // Step 3: Execute the query or update query
+            preparedStatement.setInt(1, bookId);
+            ResultSet rs = preparedStatement.executeQuery();
+            // Step 4: Process the ResultSet object.
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String title = rs.getString("title");
+                String author = rs.getString("author");
+                String publisher = rs.getString("publisher");
+                String description = rs.getString("description");
+                float price = rs.getFloat("price");
+              return new Book(id, title, author, publisher,description,price);
+            }
+        } catch (Exception ex) { 
+             Logger.getLogger(BookDAO.class.getName()).log(Level.SEVERE, null, ex);
+         }
+        return null;
+    }
+    
  
 }

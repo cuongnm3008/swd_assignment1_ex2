@@ -138,7 +138,9 @@ public class HomeController extends HttpServlet {
 //            int cartId = cartItem.getId();
             int customerId = cartItem.getCustomerId();
             int quantity = cartItem.getQuantity() + 1;
-            boolean result = _cartService.updateCart(quantity, customerId,bookID);
+            Book bookProduct = _bookService.getBookById(bookID);
+            totalPrice = quantity*bookProduct.getPrice();
+            boolean result = _cartService.updateCart(quantity,totalPrice ,customerId,bookID);
         } else {
             _cartService.addItemToCart(new Cart(1, user.getId(), bookID, totalPrice));
         }

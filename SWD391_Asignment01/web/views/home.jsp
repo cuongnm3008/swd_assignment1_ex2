@@ -41,7 +41,7 @@
                                                 <td><c:out value="${book.author}" /></td>
                                                 <td><c:out value="${book.publisher}" /></td>
                                                 <td><c:out value="${book.description}" /></td>
-                                                <td>${book.price}</td>
+                                                <td>${book.price} $</td>
                                                 <td style="text-align: center;">                                               
                                                     <form action="add-to-cart" method="post">
                                                         <input type="hidden" name="bookId" value="${book.id}">
