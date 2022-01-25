@@ -127,13 +127,14 @@ public class CartDAO implements ICartDAO {
     }
 
     @Override
-    public boolean updateCart( int quantity, int customerId, int bookId) {
+    public boolean updateCart(int quantity, float totalPrice, int customerId, int bookId) {
         boolean rowUpdated;
         try (Connection connection = new DBContext().getConnection();
-            PreparedStatement statement = connection.prepareStatement("UPDATE dbo.Cart SET Quantity = ? WHERE CustomerId = ? AND BookId =?");) {
+                PreparedStatement statement = connection.prepareStatement("UPDATE dbo.Cart SET Quantity = ?,TotalPrice = ?  WHERE CustomerId = ? AND BookId =?");) {
             statement.setInt(1, quantity);
-            statement.setInt(2, customerId);
-            statement.setInt(3, bookId);
+            statement.setFloat(2, totalPrice);
+            statement.setInt(3, customerId);
+            statement.setInt(4, bookId);
             rowUpdated = statement.executeUpdate() > 0;
             return rowUpdated;
         } catch (Exception ex) {
