@@ -5,10 +5,16 @@
  */
 package DAO;
 
+import Model.Account;
+
 /**
  *
  * @author Nguyen Manh Cuong
  */
 public interface IAccountDAO {
+     void createAccount (String Username, String Password);
     
+    int getIdAccount(String Username);
+   
+    Account getAccountByUsername(String username);
 }

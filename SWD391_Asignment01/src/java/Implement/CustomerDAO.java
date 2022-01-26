@@ -53,5 +53,22 @@ public class CustomerDAO implements ICustomerDAO {
     public Customer findByUserName(String username) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+      @Override
+    public void addcustomer(Customer customer) {
+        try {
+            String sqlQuery = "INSERT INTO dbo.Customer (AccountId,Email,Fullname,Phone) VALUES(?,?,?,?)";
+            cnn = new DBContext().getConnection();
+            ps = cnn.prepareStatement(sqlQuery);
+            ps.setInt(1, customer.getAccountId());
+            ps.setString(2, customer.getEmail());
+            ps.setString(3, customer.getFullname());
+            ps.setString(4, customer.getPhone());
+            rs = ps.executeQuery();
+        } catch (Exception ex) {
+            Logger.getLogger(CustomerDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+
+    }
 
 }

@@ -1,5 +1,6 @@
 package Controller;
 
+import DAO.IAccountDAO;
 import Implement.BookDAO;
 import java.io.IOException;
 import javax.servlet.RequestDispatcher;
@@ -11,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import DAO.IBookDAO;
 import DAO.ICartDAO;
 import DAO.ICustomerDAO;
+import Implement.AccountDAO;
 import Implement.CartDAO;
 import Implement.CustomerDAO;
 import Model.Book;
@@ -32,6 +34,7 @@ public class HomeController extends HttpServlet {
     IBookDAO _bookService;
     ICustomerDAO _customerService;
     ICartDAO _cartService;
+    IAccountDAO _accService;
     private static final long serialVersionUID = 1L;
 
     @Override
@@ -39,6 +42,7 @@ public class HomeController extends HttpServlet {
         _bookService = new BookDAO();
         _customerService = new CustomerDAO();
         _cartService = new CartDAO();
+        _accService = new AccountDAO();
     }
 
     @Override
@@ -139,8 +143,8 @@ public class HomeController extends HttpServlet {
             int customerId = cartItem.getCustomerId();
             int quantity = cartItem.getQuantity() + 1;
             Book bookProduct = _bookService.getBookById(bookID);
-            totalPrice = quantity*bookProduct.getPrice();
-            boolean result = _cartService.updateCart(quantity,totalPrice ,customerId,bookID);
+            totalPrice = quantity * bookProduct.getPrice();
+            boolean result = _cartService.updateCart(quantity, totalPrice, customerId, bookID);
         } else {
             _cartService.addItemToCart(new Cart(1, user.getId(), bookID, totalPrice));
         }
@@ -157,7 +161,7 @@ public class HomeController extends HttpServlet {
                     login(request, response);
                     break;
                 case "/register":
-                    register(request, response);
+                    checkregister(request, response);
                     break;
                 case "/add-to-cart":
                     addToCart(request, response);
@@ -170,5 +174,38 @@ public class HomeController extends HttpServlet {
             Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex
             );
         }
+    }
+
+    private void checkregister(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String username = "", password = "", fullname = "", email = "", phone = "";
+        if (request.getParameterMap().containsKey("username")) {
+            username = request.getParameter("username");
+        }
+        if (request.getParameterMap().containsKey("password")) {
+            password = request.getParameter("password");
+        }
+        if (request.getParameterMap().containsKey("fullname")) {
+            fullname = request.getParameter("fullname");
+        }
+        if (request.getParameterMap().containsKey("email")) {
+            email = request.getParameter("email");
+        }
+        if (request.getParameterMap().containsKey("phone")) {
+            phone = request.getParameter("phone");
+        }
+        _accService.createAccount(username, password);
+        int idAccount = _accService.getIdAccount(username);  
+        if (idAccount != -1) {
+            _customerService.addcustomer(new Customer(idAccount, email, phone, fullname));
+            // login successfull => push on session
+//     _customerService.findCustomerbyUserNameAndPassword(username, password);
+            SessionUltil.getInstance().pushValue(request, "USERMODEL", _customerService.findCustomerbyUserNameAndPassword(username, password));
+            response.sendRedirect(request.getContextPath() + "/home");
+        } else {
+            request.setAttribute("message", "Register failed");
+             RequestDispatcher dispatcher = request.getRequestDispatcher("views/register.jsp");
+        dispatcher.forward(request, response);
+        }
+//       response.sendRedirect(urlSend);
     }
 }

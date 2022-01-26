@@ -143,4 +143,28 @@ public class CartDAO implements ICartDAO {
         return false;
     }
 
+    @Override
+    public CartItemViewModel findCartById(int cartId) {
+        try (Connection connection = new DBContext().getConnection();
+                // Step 2:Create a statement using connection object
+                PreparedStatement preparedStatement = connection.prepareStatement("SELECT c.Id,cus.Fullname,b.Title, c.Quantity,c.TotalPrice  FROM dbo.Cart as c Join dbo.Book as b on c.BookId = b.Id \n"
+                        + " join dbo.Customer as cus on c.CustomerId = cus.Id WHERE c.Id = ?");) {
+            preparedStatement.setInt(1, cartId);
+            // Step 3: Execute the query or update query
+            ResultSet rs = preparedStatement.executeQuery();
+            // Step 4: Process the ResultSet object.
+            while (rs.next()) {
+                int id = rs.getInt(1);
+                String customerName = rs.getString(2);
+                String bookName = rs.getString(3);
+                int quantity = rs.getInt(4);
+                float totalPrice = rs.getFloat(5);
+                return new CartItemViewModel(id, bookName, totalPrice, quantity, customerName);
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(CartDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
 }
