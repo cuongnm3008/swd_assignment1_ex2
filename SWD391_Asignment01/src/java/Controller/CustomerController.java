@@ -74,7 +74,6 @@ public class CustomerController extends HttpServlet {
         String Tax = request.getParameter("VAT");
         String totalPrice = request.getParameter("totalPrice");
         OrderDetail orderDetail = new OrderDetail(bookname, quantity, subtotal,  Tax,"10", totalPrice);
-        System.out.println(orderDetail.getProductName());
         request.setAttribute("MODEL", orderDetail);
         RequestDispatcher dispatcher = request.getRequestDispatcher("views/checkout.jsp");
         dispatcher.forward(request, response);
@@ -85,6 +84,7 @@ public class CustomerController extends HttpServlet {
         String bookname = "", address = "";
 //        String quantity = "";
         String cardID = request.getParameter("cartId");
+        SessionUltil.getInstance().pushValue(request, "CARTID", cardID);
         CartItemViewModel cartItem = _cartService.findCartById(Integer.parseInt(cardID));
         if (request.getParameterMap().containsKey("bookname")) {
             bookname = request.getParameter("bookname");
@@ -105,7 +105,7 @@ public class CustomerController extends HttpServlet {
         request.setAttribute("subtotal", subtotal);
         request.setAttribute("VAT", VAT);
         request.setAttribute("totalPrice", totalPrice);
-
+        
         RequestDispatcher dispatcher = request.getRequestDispatcher("views/payment.jsp");
         dispatcher.forward(request, response);
     }
@@ -117,6 +117,8 @@ public class CustomerController extends HttpServlet {
             int totalItem = _cartService.getTotalItemOnCartByCustomerID(user.getId());
             request.setAttribute("totalItem", totalItem);
             List<CartItemViewModel> listBook = _cartService.getAllCartItems(user.getId());
+            request.setAttribute("check", "Unpaid");
+            CartItemViewModel model = listBook.get(0);
             request.setAttribute("listBook", listBook);
         }
         RequestDispatcher dispatcher = request.getRequestDispatcher("views/cart.jsp");

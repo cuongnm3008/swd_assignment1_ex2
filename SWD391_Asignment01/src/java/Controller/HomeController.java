@@ -146,7 +146,7 @@ public class HomeController extends HttpServlet {
             totalPrice = quantity * bookProduct.getPrice();
             boolean result = _cartService.updateCart(quantity, totalPrice, customerId, bookID);
         } else {
-            _cartService.addItemToCart(new Cart(1, user.getId(), bookID, totalPrice));
+            _cartService.addItemToCart(new Cart(1, user.getId(), bookID, totalPrice,"pending"));
         }
         response.sendRedirect(request.getContextPath() + "/home");
     }

@@ -18,6 +18,7 @@ public class CartItemViewModel {
     int quantity;
     String fullname;
     String title;
+    String description;
 
     public CartItemViewModel(int cartId, String bookName, float totalPrice, int quantity, String fullname) {
         this.cartId = cartId;
@@ -43,13 +44,22 @@ public class CartItemViewModel {
         this.title = title;
     }
 
-    public CartItemViewModel(int cartId, String bookName, String author, String publisher, float totalPrice, int quantity) {
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public CartItemViewModel(int cartId, String bookName, String author, String publisher, float totalPrice, int quantity,String description) {
         this.cartId = cartId;
         this.bookName = bookName;
         this.author = author;
         this.publisher = publisher;
         this.totalPrice = totalPrice;
         this.quantity = quantity;
+        this.description = description;
     }
 
     public int getCartId() {

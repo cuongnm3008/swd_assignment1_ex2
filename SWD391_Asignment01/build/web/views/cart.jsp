@@ -31,6 +31,7 @@
                                             <th>Publisher</th>
                                             <th>Quantity</th>
                                             <th>Total Price</th>
+                                            <th>Description</th>
                                             <th style="text-align: center;">Action</th>
                                         </tr>
                                     </thead>
@@ -43,11 +44,19 @@
                                             <td><c:out value="${item.publisher}" /></td>
                                             <td><c:out value="${item.quantity}" /></td>
                                             <td><c:out value="${item.totalPrice}" /> $</td>
-                                            <td style="text-align: center;">                                               
+                                            <c:if test="${item.description eq check}">
+                                                <td style="color: red !important;font-weight: 700 !important;"><c:out value="${item.description}" /></td>
+                                            </c:if>
+                                            <c:if test="${item.description ne check}">
+                                                <td style="color: green !important;font-weight: 700 !important;"><c:out value="${item.description}" /></td>
+                                            </c:if>
+                                            <td style="text-align: center;">   
+                                                 <c:if test="${item.description eq check}">
                                                 <input type="hidden" name="cartId" value="${item.cartId}">
                                                 <button type="submit" class="btn" style="background-color:#3A954E; color: wheat">
                                                     Buy
                                                 </button>
+                                                </c:if>
                                             </td>
                                         </form>
                                         </tr>

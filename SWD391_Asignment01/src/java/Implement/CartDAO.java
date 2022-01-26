@@ -31,7 +31,7 @@ public class CartDAO implements ICartDAO {
     ResultSet rs; // Lưu trữ và xử lý dư liệu
     DBContext db = new DBContext();
 
-    private static final String SELECT_CART_BY_CUSTOMERID = "SELECT c.Id,b.Title,b.Author,b.Publisher,c.TotalPrice,c.Quantity FROM dbo.Cart AS c JOIN dbo.Book AS b ON b.Id = c.BookId WHERE c.CustomerId = ?";
+    private static final String SELECT_CART_BY_CUSTOMERID = "SELECT c.Id,b.Title,b.Author,b.Publisher,c.TotalPrice,c.Quantity,c.Description FROM dbo.Cart AS c JOIN dbo.Book AS b ON b.Id = c.BookId WHERE c.CustomerId = ?";
 
     @Override
     public void addItemToCart(Cart cart) {
@@ -58,7 +58,7 @@ public class CartDAO implements ICartDAO {
         // Step 1: Establishing a Connection
         try (Connection connection = new DBContext().getConnection();
                 // Step 2:Create a statement using connection object
-                PreparedStatement preparedStatement = connection.prepareStatement("SELECT SUM(Quantity) FROM dbo.Cart WHERE CustomerId = ?");) {
+                PreparedStatement preparedStatement = connection.prepareStatement("SELECT SUM(Quantity) FROM dbo.Cart WHERE CustomerId = ? AND Description ='Unpaid'");) {
             preparedStatement.setInt(1, customerid);
             // Step 3: Execute the query or update query
             ResultSet rs = preparedStatement.executeQuery();
@@ -91,7 +91,8 @@ public class CartDAO implements ICartDAO {
                 String publisher = rs.getString(4);
                 float totalPrice = rs.getFloat(5);
                 int quantity = rs.getInt(6);
-                listItem.add(new CartItemViewModel(cartId, bookName, author, publisher, totalPrice, quantity));
+                String description = rs.getString(7);
+                listItem.add(new CartItemViewModel(cartId, bookName, author, publisher, totalPrice, quantity,description));
             }
             return listItem;
         } catch (Exception ex) {
@@ -142,6 +143,22 @@ public class CartDAO implements ICartDAO {
         }
         return false;
     }
+    
+     @Override
+    public boolean updateStateOnCart(String description, int cartId) {
+        boolean rowUpdated;
+        try (Connection connection = new DBContext().getConnection();
+                PreparedStatement statement = connection.prepareStatement("UPDATE dbo.Cart SET Description = ?  WHERE Id = ?");) {
+            statement.setString(1, description);
+            statement.setInt(2, cartId);
+            rowUpdated = statement.executeUpdate() > 0;
+            return rowUpdated;
+        } catch (Exception ex) {
+            Logger.getLogger(CartDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+    }
+    
 
     @Override
     public CartItemViewModel findCartById(int cartId) {
@@ -166,5 +183,4 @@ public class CartDAO implements ICartDAO {
         }
         return null;
     }
-
 }

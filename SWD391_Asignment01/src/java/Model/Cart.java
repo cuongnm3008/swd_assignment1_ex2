@@ -13,9 +13,17 @@ public class Cart {
     int customerId;
     int bookId;
     float totalPrice;
+    String description;
     Date dateCreated;
 
-    
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     
     public Cart(int id, int quantity, int customerId, int bookId, float totalPrice, Date dateCreated) {
         this.id = id;
@@ -27,11 +35,12 @@ public class Cart {
     }
 
     
-    public Cart(int quantity, int customerId, int bookId, float totalPrice) {
+    public Cart(int quantity, int customerId, int bookId, float totalPrice,String description) {
         this.quantity = quantity;
         this.customerId = customerId;
         this.bookId = bookId;
         this.totalPrice = totalPrice;
+        this.description = description;
     }
 
     public int getId() {

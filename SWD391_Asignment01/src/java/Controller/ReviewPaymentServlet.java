@@ -30,7 +30,6 @@ public class ReviewPaymentServlet extends HttpServlet {
             throws ServletException, IOException {
         String paymentId = request.getParameter("paymentId");
         String payerId = request.getParameter("PayerID");
-         
         try {
             PaypalServices paymentServices = new PaypalServices();
             Payment payment = paymentServices.getPaymentDetails(paymentId);

@@ -1,7 +1,10 @@
 
 package Controller;
 
+import DAO.ICartDAO;
+import Implement.CartDAO;
 import Ultil.PaypalServices;
+import Ultil.SessionUltil;
 import com.paypal.api.payments.PayerInfo;
 import com.paypal.api.payments.Payment;
 import com.paypal.api.payments.Transaction;
@@ -19,7 +22,14 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet(name = "ExecutePaymentServlet", urlPatterns = {"/execute_payment"})
 public class ExecutePaymentServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
- 
+    
+    ICartDAO _cartService;
+    
+     @Override
+    public void init() {
+       _cartService = new CartDAO();
+    }
+    
     public ExecutePaymentServlet() {
     }
     
@@ -35,9 +45,14 @@ public class ExecutePaymentServlet extends HttpServlet {
             request.setAttribute("payer", payerInfo);
             request.setAttribute("transaction", transaction);   
             
-            //xóa bản ghi trong cart đi 
+            //update bản ghi trong cart
+            String cartIString = (String) SessionUltil.getInstance().getValue(request, "CARTID");
+            int cartID = Integer.parseInt(cartIString);
+            boolean check = _cartService.updateStateOnCart("Paid", cartID);
+            if (check==true) {
+                SessionUltil.getInstance().removeValue(request, "CARTID");
+            }
             request.getRequestDispatcher("views/receipt.jsp").forward(request, response);
-             
         } catch (Exception ex) {
             request.setAttribute("errorMessage", ex.getMessage());
             request.getRequestDispatcher("views/error.jsp").forward(request, response);

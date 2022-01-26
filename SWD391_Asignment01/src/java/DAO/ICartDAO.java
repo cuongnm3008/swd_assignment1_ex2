@@ -19,4 +19,5 @@ public interface ICartDAO {
     Cart getCartItem(int userId, int bookId);
     boolean updateCart(int quantity, float totalPrice,int customerId, int bookId);
     CartItemViewModel findCartById(int cartId);
+    boolean updateStateOnCart(String description, int cartId);
 }

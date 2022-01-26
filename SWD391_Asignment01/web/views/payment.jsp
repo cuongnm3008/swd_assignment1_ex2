@@ -77,7 +77,6 @@
                                     <button type="submit" class="btn" style="background-color:#3A954E; color: wheat">
                                         Pay ${totalPrice}
                                     </button>
-                        <!--<div class="btn btn-primary mt-2">Pay<span class="fas fa-dollar-sign px-1"></span>${totalPrice}</div>-->
                                 </div>
                             </div>
                         </form>
