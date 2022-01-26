@@ -28,7 +28,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Nguyen Manh Cuong
  */
-@WebServlet(name = "CustomerController", urlPatterns = {"/customer", "/cart", "/checkout"})
+@WebServlet(name = "CustomerController", urlPatterns = {"/customer", "/cart", "/checkout", "/payment"})
 public class CustomerController extends HttpServlet {
 
     ICartDAO _cartService;
@@ -50,6 +50,9 @@ public class CustomerController extends HttpServlet {
                 case "/checkout":
                     checkout(request, response);
                     break;
+                case "/payment":
+                    paymentDetail(request, response);
+                    break;
                 default:
             }
         } catch (Exception ex) {
@@ -65,11 +68,45 @@ public class CustomerController extends HttpServlet {
 //        String subtotal = request.getParameter("subtotal");
 //        String shipping = request.getParameter("shipping");
 //        String totalPrice = request.getParameter("totalPrice");
-
-        OrderDetail orderDetail = new OrderDetail("Dac Nhan Tam", "2", "100", "10","10", "120");
+        String bookname = request.getParameter("bookname");
+        String quantity = request.getParameter("quantity");
+        String subtotal = request.getParameter("subtotal");
+        String Tax = request.getParameter("VAT");
+        String totalPrice = request.getParameter("totalPrice");
+        OrderDetail orderDetail = new OrderDetail(bookname, quantity, subtotal,  Tax,"10", totalPrice);
         System.out.println(orderDetail.getProductName());
         request.setAttribute("MODEL", orderDetail);
         RequestDispatcher dispatcher = request.getRequestDispatcher("views/checkout.jsp");
+        dispatcher.forward(request, response);
+
+    }
+
+    private void paymentDetail(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String bookname = "", address = "";
+//        String quantity = "";
+        String cardID = request.getParameter("cartId");
+        CartItemViewModel cartItem = _cartService.findCartById(Integer.parseInt(cardID));
+        if (request.getParameterMap().containsKey("bookname")) {
+            bookname = request.getParameter("bookname");
+        }
+        if (request.getParameterMap().containsKey("address")) {
+            address = request.getParameter("address");
+        }
+        if (request.getParameterMap().containsKey("subtotal")) {
+            address = request.getParameter("subtotal");
+        }
+        int quantity = cartItem.getQuantity();
+        float subtotal = cartItem.getTotalPrice();
+        float VAT = (float) (subtotal * 0.1);
+        float totalPrice = subtotal + VAT + 10;
+        bookname = cartItem.getBookName();
+        request.setAttribute("bookname", bookname);
+        request.setAttribute("quantity", quantity);
+        request.setAttribute("subtotal", subtotal);
+        request.setAttribute("VAT", VAT);
+        request.setAttribute("totalPrice", totalPrice);
+
+        RequestDispatcher dispatcher = request.getRequestDispatcher("views/payment.jsp");
         dispatcher.forward(request, response);
     }
 
@@ -101,4 +138,5 @@ public class CustomerController extends HttpServlet {
             );
         }
     }
+
 }

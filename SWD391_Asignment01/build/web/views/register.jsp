@@ -17,32 +17,33 @@
     </head>
     <body>
         <br>
-                <div class="container col-md-5">
+        <div class="container col-md-5">
             <div class="card">
                 <div class="card-body">
-                    <form action="insert-book" method="post">
-                           <h2>Register Form</h2>
-                            <div class="form-group">
-                                <label>UserName</label> <input type="text"
-                                    value="<c:out value='${book.title}' />" class="form-control"
-                                    name="title" required="required">
-                            </div>
-                            <div class="form-group">
-                                <label>Password</label> <input type="text"
-                                value="<c:out value='${book.author}' />" class="form-control"
-                                 name="author">
-                            </div>
-                            <div class="form-group">
-                                <label>Full Name</label> <input type="text"
-                                value="<c:out value='${book.author}' />" class="form-control"
-                                 name="author">
-                            </div>
-                                 <div class="form-group">
-                                <label>Phone</label> <input type="text"
-                                value="<c:out value='${book.author}' />" class="form-control"
-                                 name="author">
-                            </div>
-                            <button type="submit" class="btn btn-success">Register</button>
+                    <form action="register" method="POST">
+                        <h2>Register Form</h2>
+                        <span class="text-warning">${message}</span>
+                        <div class="form-group">
+                            <label>UserName</label> 
+                            <input type="text"class="form-control"name="username" required="required">
+                        </div>
+                        <div class="form-group">
+                            <label>Password</label> 
+                            <input type="password"class="form-control"name="password" required="required">
+                        </div>
+                        <div class="form-group">
+                            <label>Full Name</label> 
+                            <input type="text"class="form-control"name="fullname" required="required">
+                        </div>
+                        <div class="form-group">
+                            <label>Email</label> 
+                            <input type="text"class="form-control"name="email" required="required">
+                        </div>
+                        <div class="form-group">
+                            <label>Phone</label> 
+                            <input type="text"class="form-control"name="phone" required="required">
+                        </div>  
+                        <button type="submit" class="btn btn-success">Register</button>
                     </form>
                 </div>
             </div>

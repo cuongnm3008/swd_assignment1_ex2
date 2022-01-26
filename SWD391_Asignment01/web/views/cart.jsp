@@ -37,7 +37,7 @@
                                     <tbody>
                                         <c:forEach var="item" items="${listBook}">
                                             <tr>
-                                        <form action="<%=request.getContextPath()%>/checkout" method="get">
+                                        <form action="<%=request.getContextPath()%>/payment" method="get">
                                             <td><c:out value="${item.bookName}" /></td>
                                             <td><c:out value="${item.author}" /></td>
                                             <td><c:out value="${item.publisher}" /></td>

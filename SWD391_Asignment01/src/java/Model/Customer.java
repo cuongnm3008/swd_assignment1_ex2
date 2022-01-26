@@ -17,13 +17,37 @@ public class Customer {
     protected String name;
     protected String email;
     protected String phone;
+     protected int accountId;
+    protected String fullname;
 
+    public int getAccountId() {
+        return accountId;
+    }
+
+    public void setAccountId(int accountId) {
+        this.accountId = accountId;
+    }
+
+    public String getFullname() {
+        return fullname;
+    }
+
+    public void setFullname(String fullname) {
+        this.fullname = fullname;
+    }
     
 
     public Customer() {
         
     }
     
+       public Customer( int accountId,String email, String phone,  String fullname) {
+        this.email = email;
+        this.phone = phone;
+        this.accountId = accountId;
+        this.fullname = fullname;
+    }
+
     public Customer(String username, String password, int roleId, int id, String name, String email, String phone) {
         this.username = username;
         this.password = password;

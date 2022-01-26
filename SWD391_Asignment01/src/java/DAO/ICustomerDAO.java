@@ -12,9 +12,11 @@ import Model.Customer;
  * @author Nguyen Manh Cuong
  */
 public interface ICustomerDAO {
-    
+
     Customer findCustomerbyUserNameAndPassword(String email, String password);
 
     Customer findByUserName(String username);
+
+    void addcustomer(Customer customer);
 
 }

@@ -16,6 +16,32 @@ public class CartItemViewModel {
     String publisher;
     float totalPrice;
     int quantity;
+    String fullname;
+    String title;
+
+    public CartItemViewModel(int cartId, String bookName, float totalPrice, int quantity, String fullname) {
+        this.cartId = cartId;
+        this.bookName = bookName;
+        this.totalPrice = totalPrice;
+        this.quantity = quantity;
+        this.fullname = fullname;
+    }
+
+    public String getFullname() {
+        return fullname;
+    }
+
+    public void setFullname(String fullname) {
+        this.fullname = fullname;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
     public CartItemViewModel(int cartId, String bookName, String author, String publisher, float totalPrice, int quantity) {
         this.cartId = cartId;
